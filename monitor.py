@@ -14,15 +14,14 @@ def print_levels(levels):
     print("")
     for level in levels:
         height, date = inches_to_gallons(level['level']), level['date']
-        print(f" {height:5.0f} gallons -> {date}")
+        print(f" {date} -> {height:4.0f} gallons ({level['level']:2.1f} in)")
     print("")
 
 
 def main():
     levels = load()
     levels = make(levels)
-    print("Monica and William's water levels!\n")
-    print("To quit, press enter at any time.")
+    print("Monica and William's water levels!")
     line_break()
 
     new_levels = []
@@ -75,10 +74,14 @@ def main():
                     print('date entered is invalid...\n')
                     continue
                 else:
-                    new_levels.append({
+                    new = {
                         'date': new_date,
                         'level': level
-                    })
+                    }
+
+                    new_levels.append(new)
+                    levels.append(new)
+
                     print('level has been succesfully logged.\n')
                     break
         if option == 3:
@@ -100,7 +103,6 @@ def main():
         print('saving levels...')
         print_levels(new_levels)
 
-        levels += new_levels
         levels = sorted(levels, key=lambda l: l['date'])
         save(levels)
         print('\n')
@@ -163,27 +165,4 @@ def inches_to_gallons(inches):
 
 
 if __name__ == "__main__":
-    levels = [
-        {
-            'date': (2017, 11, 20),
-            'level': 46.5
-        },
-        {
-            'date': (2017, 11, 22),
-            'level': 44.5
-        },
-        {
-            'date': (2017, 11, 26),
-            'level': 39
-        },
-        {
-            'date': (2017, 11, 29),
-            'level': 37.0
-        },
-        {
-            'date': (2017, 12, 2),
-            'level': 34
-        }
-    ]
-
     main()
