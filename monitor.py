@@ -30,7 +30,8 @@ def main():
         print('Select and option:')
         print('\t1.) list levels')
         print('\t2.) add a level')
-        print('\t3.) tank inches to gallons')
+        print('\t3.) scatter plot')
+        print('\t4.) tank inches to gallons')
         try:
             option = input('-> (enter to quit): ')
             if option == '':
@@ -85,6 +86,19 @@ def main():
                     print('level has been succesfully logged.\n')
                     break
         if option == 3:
+            readings, dates = zip(*[(l['level'], l['date']) for l in levels])
+
+            time_diffs = [(d - dates[0]).days for d in dates[1:]]
+            time_diffs = [0, *time_diffs]
+            readings = list(map(inches_to_gallons, readings))
+
+            plt.scatter(time_diffs, readings)
+            plt.xlabel('Time (days)')
+            plt.ylabel('Gallons')
+            plt.grid(True)
+            plt.show()
+
+        if option == 4:
             print("")
             while True:
                 try:
@@ -111,11 +125,14 @@ def main():
 
 
 def load():
-    if not os.path.isfile('levels.json'):
-        with open('levels.json', 'w') as f:
+    monitor_dir = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(monitor_dir, 'levels.json')
+
+    if not os.path.isfile(path):
+        with open(path, 'w') as f:
             f.write('[]')
 
-    with open('levels.json', 'r') as f:
+    with open(path, 'r') as f:
         levels = json.loads(f.read())
 
     return levels
