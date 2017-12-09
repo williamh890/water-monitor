@@ -37,7 +37,7 @@ def main():
             if option == '':
                 break
             option = int(option)
-            if option not in set([1, 2, 3]):
+            if option not in set([1, 2, 3, 4]):
                 print(f'{option} is not a valid option...\n')
                 continue
         except:
@@ -125,8 +125,7 @@ def main():
 
 
 def load():
-    monitor_dir = os.path.dirname(os.path.realpath(__file__))
-    path = os.path.join(monitor_dir, 'levels.json')
+    path = get_levels_path()
 
     if not os.path.isfile(path):
         with open(path, 'w') as f:
@@ -146,12 +145,18 @@ def make(levels):
     return levels
 
 
+def get_levels_path():
+    monitor_dir = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(monitor_dir, 'levels.json')
+
+
 def save(levels):
     for level in levels:
         date_obj = level['date']
         level['date'] = (date_obj.year, date_obj.month, date_obj.day)
 
-    with open('levels.json', 'w') as f:
+    path = get_levels_path()
+    with open(path, 'w') as f:
         f.write(json.dumps(levels, indent=2))
 
 
