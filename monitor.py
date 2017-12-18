@@ -18,110 +18,139 @@ def print_levels(levels):
     print("")
 
 
-def main():
-    levels = load()
-    levels = make(levels)
-    print("Monica and William's water levels!")
-    line_break()
+class UserQuitingException(Exception):
+    pass
 
-    new_levels = []
-    dontQuit = True
-    while dontQuit:
+
+class WaterMonitor(object):
+    def __init__(self):
+        self.dontQuit = True
+        self.new_levels = []
+
+        levels = load()
+        self.levels = make(levels)
+
+    def run(self):
+        print("Monica and William's water levels!")
+        line_break()
+
+        dontQuit = True
+
+        while self.dontQuit:
+            try:
+                self.main()
+            except UserQuitingException as e:
+                break
+
+        line_break()
+        if len(self.new_levels) > 0:
+            print('saving levels...')
+            print_levels(self.new_levels)
+
+            levels = sorted(self.levels, key=lambda l: l['date'])
+            save(levels)
+            print('\n')
+
+            print('exiting...')
+
+    def main(self):
         print('Select and option:')
         print('\t1.) list levels')
         print('\t2.) add a level')
         print('\t3.) scatter plot')
         print('\t4.) tank inches to gallons')
+
+        option = input('-> (enter to quit): ')
+
+        if option == '':
+            raise UserQuitingException()
+
         try:
-            option = input('-> (enter to quit): ')
-            if option == '':
-                break
             option = int(option)
-            if option not in set([1, 2, 3, 4]):
-                print(f'{option} is not a valid option...\n')
-                continue
         except:
-            print('\nnot a valid option')
-            continue
+            print(f'option must be a number')
+            return
 
+        self.selected_action(option)
+
+    def selected_action(self, option):
         if option == 1:
-            print_levels(levels)
-        if option == 2:
-            try:
-                level = input('-> Add a level (enter to quit): ')
+            print_levels(self.levels)
+        elif option == 2:
+            self.add_level()
+        elif option == 3:
+            self.scatter_plot()
+        elif option == 4:
+            self.converter()
+        else:
+            print(option)
+            print('\nnot a valid option')
 
-                if level == '':
-                    break
+    def scatter_plot(self):
+        readings, dates = zip(
+            *[(l['level'], l['date']) for l in self.levels])
 
-                level = float(level)
-            except:
-                print('input needs to be a number...\n')
-                continue
+        time_diffs = [(d - dates[0]).days for d in dates[1:]]
+        time_diffs = [0, *time_diffs]
+        readings = list(map(inches_to_gallons, readings))
 
-            while True:
-                try:
-                    new_date = input(
-                        '\n-> Enter date or nothing for todays date (q to quit)\n-> (year, month, day): ')
+        plt.scatter(time_diffs, readings)
+        plt.xlabel('Time (days)')
+        plt.ylabel('Gallons')
+        plt.grid(True)
+        plt.show()
 
-                    if new_date == '':
-                        new_date = datetime.date.today()
-                    elif new_date == 'q':
-                        dontQuit = False
-                        break
-                    else:
-                        new_date = [int(t) for t in new_date.split(',')]
-                        new_date = datetime.date(*new_date)
-                except Exception as e:
-                    print('date entered is invalid...\n')
-                    continue
-                else:
-                    new = {
-                        'date': new_date,
-                        'level': level
-                    }
-
-                    new_levels.append(new)
-                    levels.append(new)
-
-                    print('level has been succesfully logged.\n')
-                    break
-        if option == 3:
-            readings, dates = zip(*[(l['level'], l['date']) for l in levels])
-
-            time_diffs = [(d - dates[0]).days for d in dates[1:]]
-            time_diffs = [0, *time_diffs]
-            readings = list(map(inches_to_gallons, readings))
-
-            plt.scatter(time_diffs, readings)
-            plt.xlabel('Time (days)')
-            plt.ylabel('Gallons')
-            plt.grid(True)
-            plt.show()
-
-        if option == 4:
-            print("")
-            while True:
-                try:
-                    inches = float(input('-> number of inches: '))
-                except:
-                    print('not valid number...\n')
-                else:
-                    gals = inches_to_gallons(inches)
-                    break
+    def converter(self):
+        try:
+            inches = float(input('-> number of inches: '))
+        except:
+            print('not valid number...\n')
+            return
+        else:
+            gals = inches_to_gallons(inches)
 
             print(f'{gals: 6.0f} gallons')
             print("")
 
-    line_break()
-    if len(new_levels) > 0:
-        print('saving levels...')
-        print_levels(new_levels)
+    def add_level(self):
+        try:
+            level = input('-> Add a level (enter to quit): ')
 
-        levels = sorted(levels, key=lambda l: l['date'])
-        save(levels)
-        print('\n')
+            if level == '':
+                return
 
-    print('exiting...')
+            level = float(level)
+        except:
+            print('input needs to be a number...\n')
+            self.add_level()
+
+        while True:
+            try:
+                new_date = input(
+                    '\n-> Enter date or nothing for todays date (q to quit)\n-> (year, month, day): ')
+
+                if new_date == '':
+                    new_date = datetime.date.today()
+                elif new_date == 'q':
+                    dontQuit = False
+                    break
+                else:
+                    new_date = [int(t) for t in new_date.split(',')]
+                    new_date = datetime.date(*new_date)
+            except Exception as e:
+                print('date entered is invalid...\n')
+                continue
+            else:
+                new = {
+                    'date': new_date,
+                    'level': level
+                }
+
+                self.new_levels.append(new)
+                self.levels.append(new)
+
+                print('level has been succesfully logged.\n')
+                break
 
 
 def load():
@@ -187,4 +216,4 @@ def inches_to_gallons(inches):
 
 
 if __name__ == "__main__":
-    main()
+    WaterMonitor().run()
