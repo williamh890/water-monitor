@@ -1,8 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
+import { LevelsService } from './services/levels.service';
 import { AppComponent } from './app.component';
 import { LevelsChartModule } from './levels-chart/levels-chart.module';
+
 
 @NgModule({
     declarations: [
@@ -10,9 +13,12 @@ import { LevelsChartModule } from './levels-chart/levels-chart.module';
     ],
     imports: [
         BrowserModule,
-        LevelsChartModule
+        LevelsChartModule,
+        HttpClientModule
     ],
-    providers: [],
+    providers: [
+        LevelsService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

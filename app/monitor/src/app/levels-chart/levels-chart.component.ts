@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-levels-chart',
@@ -6,6 +6,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
     styleUrls: ['./levels-chart.component.css']
 })
 export class LevelsChartComponent {
+    @Input() levels: any[];
+
     public lineChartData = [
         {data: [65, 59, 80, 81, 56, 55, 40], label: 'Water Levels'},
     ];
