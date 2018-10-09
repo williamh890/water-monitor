@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { WaterLevel } from '../models/level.model';
+
 @Component({
     selector: 'app-levels-chart',
     templateUrl: './levels-chart.component.html',
@@ -8,13 +10,19 @@ import { Component, Input } from '@angular/core';
 export class LevelsChartComponent {
     @Input() levels: any[];
 
-    public lineChartData = [
-        {data: [65, 59, 80, 81, 56, 55, 40], label: 'Water Levels'},
-    ];
-    public lineChartLabels = Array.from(Array(this.lineChartData[0].data.length).keys());
-
     public lineChartOptions = {
         responsive: true,
+        scales: {
+            xAxes: [{
+                type: 'time'
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Water Level (inches)'
+                }
+            }]
+        },
         elements: {
             point: {
                 radius: 5,
@@ -24,6 +32,7 @@ export class LevelsChartComponent {
             }
         }
     };
+
     public lineChartColors = [{
         backgroundColor: 'rgb(127, 189, 255, 0.2)',
         borderColor: 'rgb(0, 123, 255)',
@@ -35,4 +44,8 @@ export class LevelsChartComponent {
 
     public lineChartLegend = true;
     public lineChartType = 'line';
+
+    public getDatasetFrom(levels) {
+        return [ {data: levels,  label: 'Water Levels'} ];
+    }
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { LevelsService } from './services/levels.service';
 
@@ -7,8 +8,13 @@ import { LevelsService } from './services/levels.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-    levels$ = this.levels.getLevels();
+export class AppComponent implements OnInit {
+    levels$: Observable<any[]>;
 
-    constructor(public levels: LevelsService) {}
+    constructor(public levelsSevice: LevelsService) {}
+
+    ngOnInit() {
+        this.levels$ = this.levelsSevice.getLevels();
+        this.levels$.subscribe(v => console.log(v));
+    }
 }
