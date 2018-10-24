@@ -13,9 +13,13 @@ export class AppComponent implements OnInit {
     chartLevels$: Observable<any[]>;
     currentLevel$: Observable<any>;
 
+    breakpoint: number;
+
     constructor(public levelsSevice: LevelsService) {}
 
     ngOnInit() {
+        this.breakpoint = (window.innerWidth <= 600) ? 1 : 2;
+
         const levels$ = this.levelsSevice.getLevels();
         this.chartLevels$ = levels$.pipe(
             map(resp => resp.map(l => l.toPoint()))
@@ -24,5 +28,9 @@ export class AppComponent implements OnInit {
             filter(resp => !!resp),
             map(levels => levels[0])
         );
+    }
+
+    onResize(event) {
+      this.breakpoint = (event.target.innerWidth <= 600) ? 1 : 2;
     }
 }

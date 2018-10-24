@@ -44,8 +44,4 @@ export class LevelsChartComponent {
 
     public lineChartLegend = true;
     public lineChartType = 'line';
-
-    public getDatasetFrom(levels) {
-        return [ {data: levels,  label: 'Water Levels'} ];
-    }
 }

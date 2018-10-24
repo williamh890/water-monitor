@@ -1,9 +1,27 @@
-<h1> Water Monitor </h1>
+<div class="bg-light p-4 h-100">
+  <div class="container">
+    <mat-grid-list [cols]="breakpoint" rowHeight="2:1"
+      (window:resize)="onResize($event)"
+      >
 
-<div style="text-align:center">
-  <app-current-level
-    [currentLevel]="currentLevel$ | async"></app-current-level>
-  <app-levels-chart
-    [levels]="chartLevels$ | async">
-  </app-levels-chart>
+      <mat-grid-tile>
+        <mat-card><h1 class='text-center align-middle mt-1'>Water Monitor</h1></mat-card>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-card>
+          <app-current-level [currentLevel]="currentLevel$ | async">
+          </app-current-level>
+        </mat-card>
+      </mat-grid-tile>
+
+      <mat-grid-tile [colspan]="breakpoint" [rowspan]="breakpoint">
+        <mat-card>
+          <app-levels-chart [levels]="chartLevels$ | async">
+          </app-levels-chart>
+        </mat-card>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+  </div>
 </div>
