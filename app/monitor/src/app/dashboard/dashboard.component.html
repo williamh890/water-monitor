@@ -1,0 +1,25 @@
+<mat-grid-list [cols]="breakpoint" rowHeight="2:1" (window:resize)="onResize($event)">
+
+  <mat-grid-tile>
+    <mat-card>
+      <h1 class='text-center mt-1'>Water Monitor</h1>
+      <button class="position-fixed fixed-top ml-3 mt-3" mat-raised-button color="primary">Reload</button>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile>
+    <mat-card>
+      <app-current-level [currentLevel]="currentLevel">
+      </app-current-level>
+    </mat-card>
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="breakpoint" [rowspan]="breakpoint">
+    <mat-card>
+      <app-levels-chart [levels]="chartLevels">
+      </app-levels-chart>
+    </mat-card>
+  </mat-grid-tile>
+
+</mat-grid-list>
+

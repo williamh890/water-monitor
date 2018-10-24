@@ -2,9 +2,11 @@ use <HC-SR04.scad>;
 
 module cap_shape() {
   base_height = 10;
-  cylinder(h=base_height, d=50.08);
-  translate([0, 0, base_height-2])
-    cylinder(d=65, h=10);
+  union() {
+      cylinder(h=base_height, d=50.08);
+      translate([0, 0, base_height-2])
+        cylinder(d=65, h=10);
+  }
 
 }
 

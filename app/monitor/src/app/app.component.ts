@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
@@ -9,28 +9,25 @@ import { LevelsService } from './services/levels.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-    chartLevels$: Observable<any[]>;
-    currentLevel$: Observable<any>;
+export class AppComponent {
+  chartLevels$: Observable<any[]>;
+  currentLevel$: Observable<any>;
 
-    breakpoint: number;
+  monitorFile = '';
 
-    constructor(public levelsSevice: LevelsService) {}
+  constructor(public levelsSevice: LevelsService) {}
 
-    ngOnInit() {
-        this.breakpoint = (window.innerWidth <= 700) ? 1 : 2;
+  onNewMonitorFile(monitorFile: string) {
+    console.log(monitorFile);
+    this.monitorFile = monitorFile;
 
-        const levels$ = this.levelsSevice.getLevels();
-        this.chartLevels$ = levels$.pipe(
-            map(resp => resp.map(l => l.toPoint()))
-        );
-        this.currentLevel$ = levels$.pipe(
-            filter(resp => !!resp),
-            map(levels => levels[0])
-        );
-    }
-
-    onResize(event) {
-      this.breakpoint = (event.target.innerWidth <= 700) ? 1 : 2;
-    }
+    const levels$ = this.levelsSevice.getLevels(monitorFile);
+    this.chartLevels$ = levels$.pipe(
+      map(resp => resp.map(l => l.toPoint()))
+    );
+    this.currentLevel$ = levels$.pipe(
+      filter(resp => !!resp),
+      map(levels => levels[0])
+    );
+  }
 }

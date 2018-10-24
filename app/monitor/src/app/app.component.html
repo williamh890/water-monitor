@@ -1,30 +1,13 @@
 <div class="bg-light p-4 h-100">
   <div class="container">
-    <mat-grid-list [cols]="breakpoint" rowHeight="2:1"
-      (window:resize)="onResize($event)"
-      >
-
-      <mat-grid-tile>
-        <mat-card>
-            <h1 class='text-center mt-1'>Water Monitor</h1>
-          <button class="position-fixed fixed-top ml-3 mt-3" mat-raised-button color="primary">Reload</button>
-        </mat-card>
-      </mat-grid-tile>
-
-      <mat-grid-tile>
-        <mat-card>
-          <app-current-level [currentLevel]="currentLevel$ | async">
-          </app-current-level>
-        </mat-card>
-      </mat-grid-tile>
-
-      <mat-grid-tile [colspan]="breakpoint" [rowspan]="breakpoint">
-        <mat-card>
-          <app-levels-chart [levels]="chartLevels$ | async">
-          </app-levels-chart>
-        </mat-card>
-      </mat-grid-tile>
-
-    </mat-grid-list>
+    <app-dashboard
+      *ngIf="monitorFile !== ''"
+      [chartLevels]="chartLevels$ | async"
+      [currentLevel]="currentLevel$ | async"
+      ></app-dashboard>
+    <app-monitor-select
+      *ngIf="monitorFile === ''"
+       (newMonitorFile)="onNewMonitorFile($event)"
+       ></app-monitor-select>
   </div>
 </div>

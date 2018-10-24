@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { WaterLevel } from '../models/level.model';
+import { WaterLevel } from '../../models/level.model';
 
 @Component({
     selector: 'app-levels-chart',
