@@ -1,7 +1,9 @@
 <h1> Water Monitor </h1>
 
-<div *ngIf="levels$ | async" style="text-align:center">
+<div style="text-align:center">
+  <app-current-level
+    [currentLevel]="currentLevel$ | async"></app-current-level>
   <app-levels-chart
-    [levels]="levels$ | async">
+    [levels]="chartLevels$ | async">
   </app-levels-chart>
 </div>

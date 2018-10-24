@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 
 import { LevelsService } from './services/levels.service';
 
@@ -9,12 +10,19 @@ import { LevelsService } from './services/levels.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    levels$: Observable<any[]>;
+    chartLevels$: Observable<any[]>;
+    currentLevel$: Observable<any>;
 
     constructor(public levelsSevice: LevelsService) {}
 
     ngOnInit() {
-        this.levels$ = this.levelsSevice.getLevels();
-        this.levels$.subscribe(v => console.log(v));
+        const levels$ = this.levelsSevice.getLevels();
+        this.chartLevels$ = levels$.pipe(
+            map(resp => resp.map(l => l.toPoint()))
+        );
+        this.currentLevel$ = levels$.pipe(
+            filter(resp => !!resp),
+            map(levels => levels[0])
+        );
     }
 }

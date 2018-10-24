@@ -5,10 +5,11 @@ import pathlib as pl
 import boto3
 
 s3_resource = boto3.resource('s3')
-bucket = s3_resource.Bucket('water-levels')
+bucket = s3_resource.Bucket('water-monitor')
 
 levels_file = 'levels.test.json'
 local_path = pl.Path(__file__).parent / levels_file
+bucket_path = pl.Path('assets') / levels_file
 
 
 def save(levels):
@@ -16,12 +17,12 @@ def save(levels):
     with local_path.open('w') as f:
         json.dump(levels, f)
 
-    bucket.upload_file(str(local_path), levels_file)
+    bucket.upload_file(str(local_path), 'assets/'+levels_file)
 
 
 def load(default):
     try:
-        bucket.download_file(levels_file, str(local_path))
+        bucket.download_file('assets/'+levels_file, str(local_path))
     except Exception as e:
         print('Returning default value from bucket: ', e)
         return default

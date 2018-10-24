@@ -19,7 +19,7 @@ export class LevelsChartComponent {
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Water Level (inches)'
+                    labelString: 'Water Level (Gallons)'
                 }
             }]
         },

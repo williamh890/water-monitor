@@ -17,7 +17,6 @@ export class LevelsService {
         return this.http.get<any[]>('/assets/levels.json').pipe(
             map(resp => resp
                 .map(toLevelModel)
-                .map(l => l.toPoint())
             )
         );
     }
@@ -29,5 +28,11 @@ const toLevelModel = level_entry => {
 
     const dateObj = new Date(year, month - 1, day);
 
-    return new WaterLevel(level, dateObj);
+    return new WaterLevel(inchToGallons(level), dateObj);
 };
+
+const inchToGallons = inches =>
+    -0.00296 * inches ** 3 +
+     0.2176 * inches ** 2 +
+     22.14 * inches ** 1 - 15.59;
+
