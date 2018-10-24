@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     constructor(public levelsSevice: LevelsService) {}
 
     ngOnInit() {
-        this.breakpoint = (window.innerWidth <= 600) ? 1 : 2;
+        this.breakpoint = (window.innerWidth <= 700) ? 1 : 2;
 
         const levels$ = this.levelsSevice.getLevels();
         this.chartLevels$ = levels$.pipe(
@@ -31,6 +31,6 @@ export class AppComponent implements OnInit {
     }
 
     onResize(event) {
-      this.breakpoint = (event.target.innerWidth <= 600) ? 1 : 2;
+      this.breakpoint = (event.target.innerWidth <= 700) ? 1 : 2;
     }
 }

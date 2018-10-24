@@ -34,11 +34,11 @@ export class LevelsChartComponent {
     };
 
     public lineChartColors = [{
-        backgroundColor: 'rgb(127, 189, 255, 0.2)',
-        borderColor: 'rgb(0, 123, 255)',
-        pointBackgroundColor: 'rgb(0, 86, 178)',
-        pointBorderColor: 'rgb(0, 86, 178)',
-        pointHoverBackgroundColor: 'rgb(0, 86, 178)',
+        backgroundColor: 'rgb(63, 81, 181, 0.1)',
+        borderColor: 'rgb(63, 81, 181)',
+        pointBackgroundColor: 'rgb(63, 81, 181)',
+        pointBorderColor: 'rgb(63, 81, 181)',
+        pointHoverBackgroundColor: 'rgb(63, 81, 181)',
         pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }];
 
