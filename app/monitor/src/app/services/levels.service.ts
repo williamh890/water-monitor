@@ -13,26 +13,26 @@ import { WaterLevel } from '../models/level.model';
 export class LevelsService {
   constructor(private http: HttpClient) { }
 
-    public getLevels(): Observable<any[]> {
-        return this.http.get<any[]>('/assets/levels.json').pipe(
-            map(resp => resp
-                .map(toLevelModel)
-            )
-        );
-    }
+  public getLevels(levelsFile: string): Observable<any[]> {
+    return this.http.get<any[]>(`/assets/${levelsFile}`).pipe(
+      map(resp => resp
+        .map(toLevelModel)
+      )
+    );
+  }
 }
 
 const toLevelModel = level_entry => {
-    const {date, level } = level_entry;
-    const [ year, month, day ] = date;
+  const { date, level } = level_entry;
+  const [ year, month, day ] = date;
 
-    const dateObj = new Date(year, month - 1, day);
+  const dateObj = new Date(year, month - 1, day);
 
-    return new WaterLevel(inchToGallons(level), dateObj);
+  return new WaterLevel(inchToGallons(level), dateObj);
 };
 
 const inchToGallons = inches =>
-    -0.00296 * inches ** 3 +
-     0.2176 * inches ** 2 +
-     22.14 * inches ** 1 - 15.59;
+  -0.00296 * inches ** 3 +
+    0.2176 * inches ** 2 +
+    22.14 * inches ** 1 - 15.59;
 

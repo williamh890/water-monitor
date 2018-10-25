@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 
 import { LevelsService } from './services/levels.service';
 
@@ -9,20 +11,47 @@ import { LevelsService } from './services/levels.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-    chartLevels$: Observable<any[]>;
-    currentLevel$: Observable<any>;
+export class AppComponent {
+  chartLevels$: Observable<any[]>;
+  currentLevel$: Observable<any>;
 
-    constructor(public levelsSevice: LevelsService) {}
+  monitorFile = '';
 
-    ngOnInit() {
-        const levels$ = this.levelsSevice.getLevels();
-        this.chartLevels$ = levels$.pipe(
-            map(resp => resp.map(l => l.toPoint()))
-        );
-        this.currentLevel$ = levels$.pipe(
-            filter(resp => !!resp),
-            map(levels => levels[0])
-        );
-    }
+  constructor(
+    private snackBar: MatSnackBar,
+    private levelsSevice: LevelsService
+  ) {}
+
+  onNewMonitorFile(monitorFile: string) {
+    (!this.monitorFile) ?
+      this.openSnackBar(`Successfully loaded '${monitorFile}'!`, 'Loaded') :
+      this.openSnackBar(`Your all up to date on '${monitorFile}'!`, 'Reloaded');
+
+    this.monitorFile = monitorFile;
+
+    const levels$ = this.levelsSevice.getLevels(monitorFile);
+    this.chartLevels$ = levels$.pipe(
+      map(resp => resp.map(l => l.toPoint())),
+      catchError(() => {
+        this.openSnackBar(`Can't load file '${this.monitorFile}'...`, 'Error');
+        this.monitorFile = '';
+        return [];
+      }),
+    );
+
+    this.currentLevel$ = levels$.pipe(
+      filter(resp => !!resp),
+      map(levels => levels[0])
+    );
+  }
+
+  onDashboardReset() {
+    this.monitorFile = '';
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 }

@@ -1,0 +1,14 @@
+<mat-card class="w-50 mx-auto clearfix">
+  <h2>Monitor Select</h2>
+  <form  (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100 mt-2">
+      <input matInput placeholder="Monitor Json File"
+      [(ngModel)]="monitorFile" name="monitorFile"
+      #monitorJsonFile="ngModel"
+      required autofocus
+      >
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="w-100 float-right " color="accent">Load</button>
+  </form>
+</mat-card>

@@ -1,0 +1,13 @@
+<mat-progress-bar
+  mode="determinate"
+  color="primary"
+  [value]="currentLevel?.level / 13">
+</mat-progress-bar>
+
+  <mat-list>
+    <hr>
+    <mat-list-item> {{ currentLevel?.level }} Gallons </mat-list-item>
+    <hr>
+    <mat-list-item> {{ currentLevel?.date }} </mat-list-item>
+    <hr>
+  </mat-list>

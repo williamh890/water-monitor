@@ -1,9 +1,15 @@
-<h1> Water Monitor </h1>
-
-<div style="text-align:center">
-  <app-current-level
-    [currentLevel]="currentLevel$ | async"></app-current-level>
-  <app-levels-chart
-    [levels]="chartLevels$ | async">
-  </app-levels-chart>
+<div class="bg-light p-4 h-100">
+  <div class="container">
+    <app-dashboard
+      *ngIf="monitorFile !== ''"
+      (resetDashboard)="onDashboardReset()"
+      (reloadDashboard)="onNewMonitorFile(monitorFile)"
+      [chartLevels]="chartLevels$ | async"
+      [currentLevel]="currentLevel$ | async"
+      ></app-dashboard>
+    <app-monitor-select
+      *ngIf="monitorFile === ''"
+       (newMonitorFile)="onNewMonitorFile($event)"
+       ></app-monitor-select>
+  </div>
 </div>

@@ -2,25 +2,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
-import { LevelsService } from './services/levels.service';
-import { AppComponent } from './app.component';
-import { LevelsChartModule } from './levels-chart/levels-chart.module';
-import { CurrentLevelComponent } from './current-level/current-level.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { AppComponent } from './app.component';
+import { DashboardModule } from './dashboard/dashboard.module';
+import { MonitorSelectModule } from './monitor-select/monitor-select.module';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        CurrentLevelComponent
-    ],
-    imports: [
-        BrowserModule,
-        LevelsChartModule,
-        HttpClientModule
-    ],
-    providers: [
-        LevelsService
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+
+    MatSnackBarModule,
+
+    DashboardModule,
+    MonitorSelectModule,
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
