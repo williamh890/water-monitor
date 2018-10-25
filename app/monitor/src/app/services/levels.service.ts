@@ -23,13 +23,18 @@ export class LevelsService {
 }
 
 const toLevelModel = level_entry => {
-  const { date, level } = level_entry;
-  const [ year, month, day ] = date;
+  console.log(level_entry);
+  const { date, level_cm } = level_entry;
 
-  const dateObj = new Date(year, month - 1, day);
+  const levelInches = cmToInches(level_cm);
+  const dateObj = new Date(date);
 
-  return new WaterLevel(inchToGallons(level), dateObj);
+  const gals = Math.round(inchToGallons(levelInches) * 100) / 100;
+
+  return new WaterLevel(gals, dateObj);
 };
+
+const cmToInches = cm => cm / 2.54;
 
 const inchToGallons = inches =>
   -0.00296 * inches ** 3 +

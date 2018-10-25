@@ -23,10 +23,6 @@ export class AppComponent {
   ) {}
 
   onNewMonitorFile(monitorFile: string) {
-    (!this.monitorFile) ?
-      this.openSnackBar(`Successfully loaded '${monitorFile}'!`, 'Loaded') :
-      this.openSnackBar(`Your all up to date on '${monitorFile}'!`, 'Reloaded');
-
     this.monitorFile = monitorFile;
 
     const levels$ = this.levelsSevice.getLevels(monitorFile);
@@ -36,7 +32,7 @@ export class AppComponent {
         this.openSnackBar(`Can't load file '${this.monitorFile}'...`, 'Error');
         this.monitorFile = '';
         return [];
-      }),
+      })
     );
 
     this.currentLevel$ = levels$.pipe(
