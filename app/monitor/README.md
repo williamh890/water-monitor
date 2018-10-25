@@ -1,5 +1,11 @@
 # Monitor
 
+## Demo
+
+Live [demo](http://water-monitor.s3-website-us-east-1.amazonaws.com/).
+
+# Angular
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
 
 ## Development server
