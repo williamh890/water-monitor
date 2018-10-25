@@ -1,16 +1,18 @@
-#Libraries
+import contextlib
 import RPi.GPIO as GPIO
 import time
-
-GPIO.setmode(GPIO.BOARD)
 
 GPIO_TRIGGER = 37
 GPIO_ECHO = 35
 
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
 
-def distance():
+def avg(samples=100):
+    dists = [sample() for _ in range(samples)]
+
+    return sum(dists) / samples
+
+
+def sample():
     GPIO.output(GPIO_TRIGGER, True)
 
     time.sleep(0.00001)
@@ -31,23 +33,27 @@ def distance():
     return distance
 
 
-def run():
-    while True:
-        RUNS, total = 100, 0
-        for _ in range(RUNS):
-            total += distance()
-
-        dist = total / RUNS
-        print("Measured Distance = {:.2} cm".format(dist))
-        time.sleep(2)
-
-
-def main():
+@contextlib.contextmanager
+def setup():
     try:
-        run()
+        setup_pins()
+        yield
     except KeyboardInterrupt:
+        teardown()
         print("Measurement stopped by User")
-        GPIO.cleanup()
+    except Exception as e:
+        teardown()
+        raise e
+    else:
+        teardown()
 
-if __name__ == '__main__':
-    main()
+
+def setup_pins():
+    GPIO.setmode(GPIO.BOARD)
+
+    GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
+    GPIO.setup(GPIO_ECHO, GPIO.IN)
+
+
+def teardown():
+    GPIO.cleanup()

@@ -1,0 +1,10 @@
+[Unit]
+Description=Water Sensor Daemon
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/repositories/water-monitor/app/sensor/pi/main.py 
+
+[Install]
+WantedBy=multi-user.target
