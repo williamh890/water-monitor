@@ -6,28 +6,27 @@ import json
 from urllib import request, error
 
 import boto3
+import click
 
 import dist
 
 lambda_client = boto3.client('lambda')
 SAMPLE_RATE = 5
-MONITOR_FILE = 'testing-{}.json'.format(
-    ''.join(random.choice(string.ascii_uppercase + string.digits)
-            for _ in range(4))
-)
 
-
-def main():
+@click.command()
+@click.option('--monitor-file', default='levels.json')
+@click.option('--sample-rate-seconds', default=5)
+def main(monitor_file, sample_rate_seconds):
     with dist.setup():
-        last_sample = time.time()
-
         while True:
-            sample = dist.avg()
+            sample = dist.sample()
             print("Measured Distance = {:0.2f} cm".format(sample))
-            if has_connection():
-                save(sample, MONITOR_FILE)
 
-            time.sleep(SAMPLE_RATE)
+            if has_connection():
+                save(sample, monitor_file)
+
+            print('waiting...')
+            time.sleep(sample_rate_seconds)
 
 
 def save(sample, filename):
