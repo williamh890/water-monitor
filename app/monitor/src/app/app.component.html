@@ -2,6 +2,8 @@
   <div class="container">
     <app-dashboard
       *ngIf="monitorFile !== ''"
+      (resetDashboard)="onDashboardReset()"
+      (reloadDashboard)="onNewMonitorFile(monitorFile)"
       [chartLevels]="chartLevels$ | async"
       [currentLevel]="currentLevel$ | async"
       ></app-dashboard>

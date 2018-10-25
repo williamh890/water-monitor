@@ -1,9 +1,11 @@
+<button (click)="reloadDashboard.emit()" class="position-fixed fixed-top ml-2 mt-3" mat-raised-button color="primary">Reload</button>
+<button (click)="resetDashboard.emit()" style="left: 92px" class="position-fixed fixed-top mt-3" mat-raised-button color="accent">Reset</button>
+
 <mat-grid-list [cols]="breakpoint" rowHeight="2:1" (window:resize)="onResize($event)">
 
   <mat-grid-tile>
     <mat-card>
       <h1 class='text-center mt-1'>Water Monitor</h1>
-      <button class="position-fixed fixed-top ml-3 mt-3" mat-raised-button color="primary">Reload</button>
     </mat-card>
   </mat-grid-tile>
 

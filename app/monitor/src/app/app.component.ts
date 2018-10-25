@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+
+import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 
 import { LevelsService } from './services/levels.service';
 
@@ -15,19 +17,41 @@ export class AppComponent {
 
   monitorFile = '';
 
-  constructor(public levelsSevice: LevelsService) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private levelsSevice: LevelsService
+  ) {}
 
   onNewMonitorFile(monitorFile: string) {
-    console.log(monitorFile);
+    (!this.monitorFile) ?
+      this.openSnackBar(`Successfully loaded '${monitorFile}'!`, 'Loaded') :
+      this.openSnackBar(`Your all up to date on '${monitorFile}'!`, 'Reloaded');
+
     this.monitorFile = monitorFile;
 
     const levels$ = this.levelsSevice.getLevels(monitorFile);
     this.chartLevels$ = levels$.pipe(
-      map(resp => resp.map(l => l.toPoint()))
+      map(resp => resp.map(l => l.toPoint())),
+      catchError(() => {
+        this.openSnackBar(`Can't load file '${this.monitorFile}'...`, 'Error');
+        this.monitorFile = '';
+        return [];
+      }),
     );
+
     this.currentLevel$ = levels$.pipe(
       filter(resp => !!resp),
       map(levels => levels[0])
     );
+  }
+
+  onDashboardReset() {
+    this.monitorFile = '';
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

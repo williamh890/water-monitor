@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DashboardComponent implements OnInit {
   @Input() chartLevels: any[];
   @Input() currentLevel: any;
+  @Output() resetDashboard = new EventEmitter<void>();
+  @Output() reloadDashboard = new EventEmitter<void>();
 
   breakpoint: number;
 

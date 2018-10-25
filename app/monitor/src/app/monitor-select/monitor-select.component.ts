@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./monitor-select.component.css']
 })
 export class MonitorSelectComponent {
-  monitorFile = '';
+  monitorFile = 'levels.json';
   @Output() newMonitorFile = new EventEmitter<string>();
 
   onSubmit() {
